@@ -14,13 +14,33 @@ Medical::OPCS4 - OPCS4 Wrapper module
 
 =head1 VERSION
 
-Version 0.01
+Version 0.02
 
 =cut
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 =head1 SYNOPSIS
+
+OPCS-4 is an abbreviation of the Office of Population, Censuses and Surveys Classification of 
+Surgical Operations and Procedures (4th revision)[1]. It translates operations, procedures 
+and interventions carried out on a patient during an episode of health care in the NHS into 
+alphanumeric code usually done by trained health care professionals working in an area called
+clinical coding. As such it is comparable with ICD-10, which is used for coding diagnoses in
+the same setting. There are some areas of overlapping between ICD-10 and OPCS-4. for example
+both feature codes for the delivery of children. In the U.K. it is recommended clinical coders use
+the OPCS-4. codes for these procedures.
+
+This modules provides a wrapper around the NHS CFH OPCS-4 distribution which can be 
+found here L<http://www.connectingforhealth.nhs.uk/systemsandservices/data/clinicalcoding/codingstandards/opcs4>
+
+    my $O = Medical::OPCS4->new();
+    $O->parse('./t/testdata.txt');
+    my $Term = $O->get_term('O16');
+    my $Parent = $O->get_parent_term( 'O16.1' );
+    my $ra_ch = $O->get_child_terms( 'O16' );
+
+The GitHub page for this module is here L<https://github.com/spiros/Medical-OPCS4>
 
 =head1 METHODS
 
@@ -184,6 +204,8 @@ sub get_parent_term {
    
    if ( ref $term && ref $term eq 'Medical::OPCS4::Term' ) {
       $search_term = $term->term;
+   } else {
+       $search_term  = $term;
    }
    
    return undef 
@@ -265,6 +287,8 @@ sub get_parent_terms {
    
    if ( ref $term && ref $term eq 'Medical::OPCS4::Term' ) {
       $search_term = $term->term;
+   } else {
+       $search_term = $term;
    }
    
    return undef 
@@ -365,6 +389,8 @@ sub get_child_terms {
 
    if ( ref $term && ref $term eq 'Medical::OPCS4::Term' ) {
      $search_term = $term->term;
+   } else {
+       $search_term = $term;
    }
    
    return undef 

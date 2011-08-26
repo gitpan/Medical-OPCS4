@@ -12,6 +12,7 @@ my %WriteMakefileArgs = (
   'ABSTRACT' => 'OPCS4 Wrapper module',
   'AUTHOR' => 'Spiros Denaxas <s.denaxas@gmail.com>',
   'BUILD_REQUIRES' => {
+    'Test::Deep' => '0',
     'Test::More' => '0'
   },
   'CONFIGURE_REQUIRES' => {
@@ -27,7 +28,7 @@ my %WriteMakefileArgs = (
     'Graph::Directed' => '0',
     'Text::CSV' => '0'
   },
-  'VERSION' => '0.001',
+  'VERSION' => '0.002',
   'test' => {
     'TESTS' => 't/*.t'
   }

@@ -50,10 +50,6 @@ sub parse {
    my $self     = shift;
    my $filename = shift;
    
-   # UTF8 is needed as there is a single term with an accept character
-   # in the term description:
-   # M91.1	Juvenile osteochondrosis of head of femur [Legg-Calvé-Perthes]
-   
    open my $io, "<:encoding(utf8)", $filename
       || die "$filename: $!";
 
@@ -61,9 +57,9 @@ sub parse {
    ## First pass: add all the nodes
       
    while ( my $rh = $self->{csv}->getline_hr( $io) ) {
-      my $icd    = $rh->{icd};
-      $self->{g}->add_vertex( $rh->{icd} );
-      $self->{g}->set_vertex_attribute( $rh->{icd}, 'description', $rh->{description} );
+      my $opcs    = $rh->{opcs};
+      $self->{g}->add_vertex( $rh->{opcs} );
+      $self->{g}->set_vertex_attribute( $rh->{opcs}, 'description', $rh->{description} );
    }
    
    ##   
@@ -99,18 +95,14 @@ sub _get_parent {
 
    my $length = length( $term );
    
-   if ( $length == 5 ){
-      return substr( $term, 0, 4 );
-   } 
-   
-   elsif ( $length == 4){
-      return substr($term, 0, 3);
-   } 
-   
-   elsif ( $length == 3 ) { 
+   if ( $length == 3 ) { 
       return 'root'      
-   }
+   } 
    
+   if ( $term =~ m/\./ ) {
+       return substr( $term, 0, (  index $term, '.') );       
+   }
+      
 }
 
 =head2 graph
